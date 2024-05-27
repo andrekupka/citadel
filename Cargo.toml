@@ -9,3 +9,5 @@ tokio = { version = "1.37.0", features = ["full"] }
 log = "0.4.21"
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+serde = { version = "1.0.203", features = ["derive"] }
+toml = "0.8.13"

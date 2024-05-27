@@ -8,10 +8,10 @@ fn initialize_web_app() -> Router {
         .route("/info", get(get_info))
 }
 
-pub async fn run() {
+pub async fn run(host: String, port: u16) {
     let app = initialize_web_app();
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    let listener = tokio::net::TcpListener::bind((host, port)).await.unwrap();
     tracing::info!("Listening on {}", listener.local_addr().unwrap());
 
     axum::serve(listener, app).await.unwrap();
