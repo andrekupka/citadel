@@ -1,12 +1,13 @@
 use std::sync::Arc;
 
 use axum::{Json, Router};
-use axum::extract::State;
+use axum::extract::{Query, State};
 use axum::routing::get;
+use serde::Deserialize;
 
 use crate::app::rest::RouteContributor;
 use crate::periphery::gpio::service::GpioService;
-use crate::periphery::gpio::transport::GpioEntityContainerDto;
+use crate::periphery::gpio::transport::{GpioEntityContainerDto, GpioEntityKindDto};
 
 pub struct GpioRouteContributor {
     service: Arc<dyn GpioService>,
@@ -20,13 +21,23 @@ impl GpioRouteContributor {
     }
 }
 
+#[derive(Deserialize)]
+struct KindFilter {
+    kind: Option<GpioEntityKindDto>,
+}
+
 async fn list_entities(
     State(service): State<Arc<dyn GpioService>>,
+    Query(filter): Query<KindFilter>,
 ) -> Json<GpioEntityContainerDto> {
-    let entities = service.list_entities_by_kind(None).await
+    let entities = match filter.kind {
+        None => service.list_entities(),
+        Some(kind) => service.list_entities_by_kind(kind.into()),
+    }.await
         .iter()
         .map(|e| e.into())
         .collect();
+
     Json(GpioEntityContainerDto {
         entities,
     })

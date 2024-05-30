@@ -6,3 +6,8 @@
   name = "Main Light"
   kind = "light"
   pin = 10
+[[gpio]]
+  id = "fan"
+  name = "Main Fan"
+  kind = "fan"
+  pin = 12

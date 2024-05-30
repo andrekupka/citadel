@@ -1,7 +1,7 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use crate::periphery::gpio::model::{GpioEntity, GpioEntityKind, GpioEntityState};
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub(crate) enum GpioEntityKindDto {
     Light,
@@ -15,6 +15,16 @@ impl From<GpioEntityKind> for GpioEntityKindDto {
             GpioEntityKind::Light => Self::Light,
             GpioEntityKind::Fan => Self::Fan,
             GpioEntityKind::Generic => Self::Generic,
+        }
+    }
+}
+
+impl From<GpioEntityKindDto> for GpioEntityKind {
+    fn from(value: GpioEntityKindDto) -> Self {
+        match value {
+            GpioEntityKindDto::Light => Self::Light,
+            GpioEntityKindDto::Fan => Self::Fan,
+            GpioEntityKindDto::Generic => Self::Generic,
         }
     }
 }
