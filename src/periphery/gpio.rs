@@ -1,4 +1,5 @@
 use crate::periphery::gpio::config::GpioConfig;
+use crate::periphery::gpio::hardware::create_gpio_hardware_service;
 use crate::periphery::gpio::rest::GpioRouteContributor;
 use crate::periphery::gpio::service::create_gpio_service;
 
@@ -7,8 +8,10 @@ pub mod rest;
 pub mod service;
 mod model;
 mod transport;
+mod hardware;
 
-pub fn initialize_route_contributor(config: &Vec<GpioConfig>) -> Box<GpioRouteContributor> {
-    let service = create_gpio_service(config);
+pub fn initialize_route_contributor(config: &GpioConfig) -> Box<GpioRouteContributor> {
+    let hardware_service = create_gpio_hardware_service();
+    let service = create_gpio_service(hardware_service, &config.entities);
     GpioRouteContributor::new(service)
 }

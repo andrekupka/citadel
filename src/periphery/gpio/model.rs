@@ -1,5 +1,5 @@
 #[derive(Clone, Copy, Debug)]
-pub enum GpioEntityState {
+pub enum GpioState {
     Low,
     High,
 }
@@ -22,5 +22,5 @@ pub struct GpioEntityMetadata {
 #[derive(Debug)]
 pub struct GpioEntity {
     pub metadata: GpioEntityMetadata,
-    pub state: GpioEntityState,
+    pub state: GpioState,
 }

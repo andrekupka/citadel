@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use crate::periphery::gpio::model::{GpioEntity, GpioEntityKind, GpioEntityState};
+use crate::periphery::gpio::model::{GpioEntity, GpioEntityKind, GpioState};
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -31,16 +31,16 @@ impl From<GpioEntityKindDto> for GpioEntityKind {
 
 #[derive(Serialize)]
 #[serde(rename_all = "kebab-case")]
-pub enum GpioEntityStateDto {
+pub enum GpioStateDto {
     Low,
     High,
 }
 
-impl From<GpioEntityState> for GpioEntityStateDto {
-    fn from(value: GpioEntityState) -> Self {
+impl From<GpioState> for GpioStateDto {
+    fn from(value: GpioState) -> Self {
         match value {
-            GpioEntityState::Low => Self::Low,
-            GpioEntityState::High => Self::High,
+            GpioState::Low => Self::Low,
+            GpioState::High => Self::High,
         }
     }
 }
@@ -50,7 +50,7 @@ pub struct GpioEntityDto {
     pub id: String,
     pub name: String,
     pub kind: GpioEntityKindDto,
-    pub state: GpioEntityStateDto,
+    pub state: GpioStateDto,
 }
 
 #[derive(Serialize)]

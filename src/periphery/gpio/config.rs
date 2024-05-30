@@ -1,7 +1,13 @@
 use serde::Deserialize;
+
 use crate::periphery::gpio::model::{GpioEntityKind, GpioEntityMetadata};
 
-#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq)]
+#[derive(Debug, Deserialize)]
+pub struct GpioConfig {
+    pub entities: Vec<GpioEntityConfig>,
+}
+
+#[derive(Copy, Clone, Debug, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum GpioKindConfig {
     Light,
@@ -9,8 +15,8 @@ pub enum GpioKindConfig {
     Generic,
 }
 
-#[derive(Clone, Debug, Deserialize)]
-pub struct GpioConfig {
+#[derive(Debug, Deserialize)]
+pub struct GpioEntityConfig {
     pub id: String,
     pub name: String,
     pub kind: GpioKindConfig,
@@ -28,8 +34,8 @@ impl From<GpioKindConfig> for GpioEntityKind {
     }
 }
 
-impl From<&GpioConfig> for GpioEntityMetadata {
-    fn from(value: &GpioConfig) -> GpioEntityMetadata {
+impl From<&GpioEntityConfig> for GpioEntityMetadata {
+    fn from(value: &GpioEntityConfig) -> GpioEntityMetadata {
         GpioEntityMetadata {
             id: value.id.clone(),
             name: value.name.clone(),

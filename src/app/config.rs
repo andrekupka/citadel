@@ -6,10 +6,9 @@ use thiserror::Error;
 use crate::app::rest::ServerConfig;
 use crate::periphery::config::PeripheryConfig;
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct AppConfig {
     pub server: ServerConfig,
-    #[serde(flatten)]
     pub periphery: PeripheryConfig,
 }
 

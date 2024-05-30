@@ -1,7 +1,7 @@
 use axum::Router;
 use serde::Deserialize;
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct ServerConfig {
     #[serde(default = "default_host")]
     pub host: String,
