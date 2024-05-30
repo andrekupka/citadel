@@ -1,15 +1,20 @@
 use std::process::ExitCode;
-use tracing::error;
-use crate::config::model::Config;
+use axum::Router;
+use tracing::{debug, error};
+use crate::app::config::AppConfig;
+use crate::app::info::InfoAppRouterContributor;
+use crate::app::rest::AppRouteContributor;
 
-mod common;
-mod web;
-mod config;
+mod app;
+mod periphery;
 
-async fn read_config() -> Result<Config, ExitCode> {
-    let config_result = config::reader::read_config_from_path("./example/config.toml").await;
+async fn read_config() -> Result<AppConfig, ExitCode> {
+    let config_result = app::config::read_config_from_path("./example/config.toml").await;
     match config_result {
-        Ok(config) => Ok(config),
+        Ok(config) => {
+            debug!("Read configuration: {:?}", config);
+            Ok(config)
+        },
         Err(e) => {
             error!("{}", e);
             Err(ExitCode::from(1))
@@ -18,11 +23,15 @@ async fn read_config() -> Result<Config, ExitCode> {
 }
 
 async fn try_main() -> Result<(), ExitCode> {
-    common::logging::init();
+    app::logging::init();
 
     let config = read_config().await?;
 
-    web::app::run(config.server.host, config.server.port).await;
+    let contributors: Vec<Box<dyn AppRouteContributor>> = vec![
+        InfoAppRouterContributor::new(),
+    ];
+
+    app::rest::run(config.server.host, config.server.port, &contributors).await;
 
     Ok(())
 }
