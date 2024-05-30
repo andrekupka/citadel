@@ -4,6 +4,16 @@ pub enum GpioState {
     High,
 }
 
+impl GpioState {
+
+    pub fn invert(&self) -> Self {
+        match self {
+            Self::Low => Self::High,
+            Self::High => Self::Low,
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum GpioEntityKind {
     Light,
