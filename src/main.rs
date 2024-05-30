@@ -1,9 +1,10 @@
 use std::process::ExitCode;
-use axum::Router;
+
 use tracing::{debug, error};
+
 use crate::app::config::AppConfig;
-use crate::app::info::InfoAppRouterContributor;
-use crate::app::rest::AppRouteContributor;
+use crate::app::info::InfoRouteContributor;
+use crate::app::rest::RouteContributor;
 
 mod app;
 mod periphery;
@@ -27,8 +28,9 @@ async fn try_main() -> Result<(), ExitCode> {
 
     let config = read_config().await?;
 
-    let contributors: Vec<Box<dyn AppRouteContributor>> = vec![
-        InfoAppRouterContributor::new(),
+    let contributors: Vec<Box<dyn RouteContributor>> = vec![
+        InfoRouteContributor::new(),
+        periphery::gpio::initialize_route_contributor(&config.periphery.gpio),
     ];
 
     app::rest::run(config.server.host, config.server.port, &contributors).await;

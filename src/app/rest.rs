@@ -1,5 +1,4 @@
 use axum::Router;
-use axum::routing::get;
 use serde::Deserialize;
 
 #[derive(Clone, Debug, Deserialize)]
@@ -19,12 +18,12 @@ fn default_port() -> u16 {
     3000
 }
 
-pub trait AppRouteContributor {
+pub trait RouteContributor {
 
     fn contribute_routes(&self, router: Router) -> Router;
 }
 
-pub async fn run(host: String, port: u16, route_providers: &Vec<Box<dyn AppRouteContributor>>) {
+pub async fn run(host: String, port: u16, route_providers: &Vec<Box<dyn RouteContributor>>) {
     let listener = tokio::net::TcpListener::bind((host, port)).await.unwrap();
     tracing::info!("Listening on {}", listener.local_addr().unwrap());
 

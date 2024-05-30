@@ -1,14 +1,14 @@
 use axum::Router;
 use axum::routing::get;
-use crate::app::rest::AppRouteContributor;
+use crate::app::rest::RouteContributor;
 
-pub struct InfoAppRouterContributor {
+pub struct InfoRouteContributor {
 }
 
-impl InfoAppRouterContributor {
+impl InfoRouteContributor {
 
-    pub(crate) fn new() -> Box<InfoAppRouterContributor> {
-        Box::new(InfoAppRouterContributor {})
+    pub(crate) fn new() -> Box<InfoRouteContributor> {
+        Box::new(InfoRouteContributor {})
     }
 }
 
@@ -16,7 +16,7 @@ async fn get_info() -> &'static str {
     "This is citadel"
 }
 
-impl AppRouteContributor for InfoAppRouterContributor {
+impl RouteContributor for InfoRouteContributor {
     fn contribute_routes(&self, router: Router) -> Router {
         router.route("/info", get(get_info))
     }
