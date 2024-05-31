@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use crate::periphery::pin::model::PinEntity;
+use crate::periphery::pin::model::{PinEntity, PinEntityKind, PinState};
 
 #[derive(Serialize)]
 pub struct PinEntityDto<K, S> {
@@ -15,8 +15,8 @@ pub struct PinEntityContainerDto<K, S> {
 }
 
 impl<K1, K2, S1, S2> From<&PinEntity<K1, S1>> for PinEntityDto<K2, S2>
-    where K1: Copy + Clone + Into<K2>,
-          S1: Copy + Clone + Into<S2> {
+    where K1: PinEntityKind + Into<K2>,
+          S1: PinState + Into<S2> {
     fn from(value: &PinEntity<K1, S1>) -> Self {
         Self {
             id: value.metadata.id.clone(),

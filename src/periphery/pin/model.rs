@@ -1,5 +1,10 @@
+pub trait PinState: Copy + Clone + Default + Send {}
+
+pub trait PinEntityKind: Copy + Clone {}
+
 #[derive(Clone, Debug)]
-pub struct PinEntityMetadata<K> where K: Copy + Clone {
+pub struct PinEntityMetadata<K>
+    where K: PinEntityKind {
     pub id: String,
     pub name: String,
     pub kind: K,
@@ -7,7 +12,9 @@ pub struct PinEntityMetadata<K> where K: Copy + Clone {
 }
 
 #[derive(Debug)]
-pub struct PinEntity<K, S> where K: Copy + Clone, S: Copy + Clone {
+pub struct PinEntity<K, S>
+    where K: PinEntityKind,
+          S: PinState {
     pub metadata: PinEntityMetadata<K>,
     pub state: S,
 }

@@ -1,10 +1,11 @@
 use async_trait::async_trait;
 
-use crate::periphery::pin::model::PinEntity;
+use crate::periphery::pin::model::{PinEntity, PinEntityKind, PinState};
 
 #[async_trait]
 pub trait PinService<K, S>: Send + Sync
-    where K: Copy + Clone, S: Copy + Clone {
+    where K: PinEntityKind,
+          S: PinState {
     async fn list_entities(&self) -> Vec<PinEntity<K, S>>;
 
     async fn list_entities_by_kind(&self, kind: K) -> Vec<PinEntity<K, S>>;

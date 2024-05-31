@@ -1,9 +1,18 @@
-use crate::periphery::pin::model::{PinEntity, PinEntityMetadata};
+use crate::periphery::pin::model::{PinEntity, PinEntityKind, PinEntityMetadata, PinState};
 
 #[derive(Clone, Copy, Debug)]
 pub enum GpioState {
     Low,
     High,
+}
+
+impl Default for GpioState {
+    fn default() -> Self {
+        GpioState::Low
+    }
+}
+
+impl PinState for GpioState {
 }
 
 impl GpioState {
@@ -20,6 +29,9 @@ pub enum GpioEntityKind {
     Light,
     Fan,
     Generic,
+}
+
+impl PinEntityKind for GpioEntityKind {
 }
 
 pub type GpioEntity = PinEntity<GpioEntityKind, GpioState>;

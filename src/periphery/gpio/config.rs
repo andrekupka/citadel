@@ -1,25 +1,28 @@
 use serde::Deserialize;
+
 use crate::periphery::gpio::model::GpioEntityKind;
-use crate::periphery::pin::config::{PinConfig, PinEntityConfig};
+use crate::periphery::pin::config::{PinConfig, PinEntityConfig, PinEntityKindConfig};
 
 #[derive(Copy, Clone, Debug, Deserialize)]
 #[serde(rename_all = "kebab-case")]
-pub enum GpioKindConfig {
+pub enum GpioEntityKindConfig {
     Light,
     Fan,
     Generic,
 }
 
-pub type GpioConfig = PinConfig<GpioKindConfig>;
+impl PinEntityKindConfig for GpioEntityKindConfig {}
 
-pub type GpioEntityConfig = PinEntityConfig<GpioKindConfig>;
+pub type GpioConfig = PinConfig<GpioEntityKindConfig>;
 
-impl From<GpioKindConfig> for GpioEntityKind {
-    fn from(value: GpioKindConfig) -> Self {
+pub type GpioEntityConfig = PinEntityConfig<GpioEntityKindConfig>;
+
+impl From<GpioEntityKindConfig> for GpioEntityKind {
+    fn from(value: GpioEntityKindConfig) -> Self {
         match value {
-            GpioKindConfig::Light => Self::Light,
-            GpioKindConfig::Fan => Self::Fan,
-            GpioKindConfig::Generic => Self::Generic,
+            GpioEntityKindConfig::Light => Self::Light,
+            GpioEntityKindConfig::Fan => Self::Fan,
+            GpioEntityKindConfig::Generic => Self::Generic,
         }
     }
 }
