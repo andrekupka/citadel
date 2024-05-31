@@ -11,3 +11,8 @@
   name = "Main Fan"
   kind = "fan"
   pin = 12
+[[periphery.pwm.entities]]
+  id = "dimmable_light"
+  name = "Dimmable Light"
+  kind = "light"
+  pin = 8

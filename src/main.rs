@@ -31,6 +31,7 @@ async fn try_main() -> Result<(), ExitCode> {
     let contributors: Vec<Box<dyn RouteContributor>> = vec![
         InfoRouteContributor::new(),
         periphery::gpio::initialize_route_contributor(&config.periphery.gpio),
+        periphery::pwm::initialize_route_contributor(&config.periphery.pwm)
     ];
 
     app::rest::run(config.server.host, config.server.port, &contributors).await;
