@@ -1,6 +1,14 @@
 use serde::{Deserialize, Serialize};
 
-use crate::periphery::gpio::model::{GpioEntity, GpioEntityKind, GpioState};
+use crate::periphery::gpio::model::{GpioEntityKind, GpioState};
+use crate::periphery::pin::transport::{PinEntityContainerDto, PinEntityDto, PinEntityUpdateDto};
+
+pub type GpioEntityDto = PinEntityDto<GpioEntityKindDto, GpioStateDto>;
+
+pub type GpioEntityContainerDto = PinEntityContainerDto<GpioEntityKindDto, GpioStateDto>;
+
+pub type GpioEntityUpdateDto = PinEntityUpdateDto<GpioStateDto>;
+
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -53,33 +61,4 @@ impl From<GpioStateDto> for GpioState {
             GpioStateDto::High => Self::High,
         }
     }
-}
-
-#[derive(Serialize)]
-pub struct GpioEntityDto {
-    pub id: String,
-    pub name: String,
-    pub kind: GpioEntityKindDto,
-    pub state: GpioStateDto,
-}
-
-#[derive(Serialize)]
-pub struct GpioEntityContainerDto {
-    pub entities: Vec<GpioEntityDto>,
-}
-
-impl From<&GpioEntity> for GpioEntityDto {
-    fn from(value: &GpioEntity) -> Self {
-        Self {
-            id: value.metadata.id.clone(),
-            name: value.metadata.name.clone(),
-            kind: value.metadata.kind.into(),
-            state: value.state.into(),
-        }
-    }
-}
-
-#[derive(Deserialize)]
-pub struct GpioEntityUpdateDto {
-    pub state: GpioStateDto,
 }

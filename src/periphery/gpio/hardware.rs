@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
-
 use crate::periphery::gpio::model::GpioState;
 
-pub trait GpioHardwareService : Send + Sync {
+pub trait GpioHardwareService: Send + Sync {
     fn get_state(&self, pin: u8) -> GpioState;
 
     fn set_state(&self, pin: u8, state: GpioState);

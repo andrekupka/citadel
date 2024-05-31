@@ -6,16 +6,10 @@ use async_trait::async_trait;
 use crate::periphery::gpio::config::GpioEntityConfig;
 use crate::periphery::gpio::hardware::GpioHardwareService;
 use crate::periphery::gpio::model::{GpioEntity, GpioEntityKind, GpioEntityMetadata, GpioState};
+use crate::periphery::pin::service::PinService;
 
 #[async_trait]
-pub trait GpioService: Send + Sync {
-    async fn list_entities(&self) -> Vec<GpioEntity>;
-
-    async fn list_entities_by_kind(&self, kind: GpioEntityKind) -> Vec<GpioEntity>;
-
-    async fn get_entity_by_id(&self, id: String) -> Option<GpioEntity>;
-
-    async fn update_entity_state_by_id(&self, id: String, state: GpioState) -> Option<GpioEntity>;
+pub trait GpioService : PinService<GpioEntityKind, GpioState> {
 
     async fn toggle_entity_state_by_id(&self, id: String) -> Option<GpioEntity>;
 }
@@ -50,7 +44,7 @@ impl DefaultGpioService {
 }
 
 #[async_trait]
-impl GpioService for DefaultGpioService {
+impl PinService<GpioEntityKind, GpioState> for DefaultGpioService {
 
     async fn list_entities(&self) -> Vec<GpioEntity> {
         self.entities
@@ -75,6 +69,8 @@ impl GpioService for DefaultGpioService {
             .map(|metadata| self.enhance_entity_with_state(metadata))
     }
 
+
+
     async fn update_entity_state_by_id(&self, id: String, state: GpioState) -> Option<GpioEntity> {
         self.entities.get(&id).map(|metadata| {
             self.hardware_service.set_state(metadata.pin, state);
@@ -84,6 +80,10 @@ impl GpioService for DefaultGpioService {
             }
         })
     }
+}
+
+#[async_trait]
+impl GpioService for DefaultGpioService {
 
     async fn toggle_entity_state_by_id(&self, id: String) -> Option<GpioEntity> {
         self.entities.get(&id).map(|metadata| {
@@ -95,6 +95,5 @@ impl GpioService for DefaultGpioService {
                 state: inverted_state,
             }
         })
-
     }
 }
