@@ -1,6 +1,6 @@
-pub trait PinState: Copy + Clone + Default + Send {}
+pub trait PinState: Copy + Clone + Default + Send + Sync {}
 
-pub trait PinEntityKind: Copy + Clone {}
+pub trait PinEntityKind: Copy + Clone + PartialEq + Send + Sync {}
 
 #[derive(Clone, Debug)]
 pub struct PinEntityMetadata<K>

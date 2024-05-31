@@ -1,4 +1,4 @@
-use crate::periphery::pin::model::{PinEntity, PinEntityKind, PinEntityMetadata, PinState};
+use crate::periphery::pin::model::{PinEntity, PinEntityKind, PinState};
 
 #[derive(Clone, Copy, Debug)]
 pub enum GpioState {
@@ -35,5 +35,3 @@ impl PinEntityKind for GpioEntityKind {
 }
 
 pub type GpioEntity = PinEntity<GpioEntityKind, GpioState>;
-
-pub type GpioEntityMetadata = PinEntityMetadata<GpioEntityKind>;

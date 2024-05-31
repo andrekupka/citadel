@@ -1,7 +1,7 @@
 use serde::Deserialize;
 
 use crate::periphery::gpio::model::GpioEntityKind;
-use crate::periphery::pin::config::{PinConfig, PinEntityConfig, PinEntityKindConfig};
+use crate::periphery::pin::config::{PinEntityKindConfig, PinEntityMetadataConfig};
 
 #[derive(Copy, Clone, Debug, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -13,9 +13,18 @@ pub enum GpioEntityKindConfig {
 
 impl PinEntityKindConfig for GpioEntityKindConfig {}
 
-pub type GpioConfig = PinConfig<GpioEntityKindConfig>;
+#[derive(Debug, Deserialize)]
+pub struct GpioConfig {
+    pub entities: Vec<GpioEntityConfig>,
+}
 
-pub type GpioEntityConfig = PinEntityConfig<GpioEntityKindConfig>;
+pub type GpioEntityMetadataConfig = PinEntityMetadataConfig<GpioEntityKindConfig>;
+
+#[derive(Debug, Deserialize)]
+pub struct GpioEntityConfig {
+    #[serde(flatten)]
+    pub metadata: GpioEntityMetadataConfig,
+}
 
 impl From<GpioEntityKindConfig> for GpioEntityKind {
     fn from(value: GpioEntityKindConfig) -> Self {
